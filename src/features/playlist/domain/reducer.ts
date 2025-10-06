@@ -1,17 +1,28 @@
 import { Action, State } from "./types";
+
 export function reducer(state: State, a: Action): State {
   switch (a.type) {
-    case "ADD": return state.playlist.some(t=>t.id===a.track.id)?state:{...state, playlist:[a.track, ...state.playlist]};
+    case "ADD":
+      if (state.playlist.some(t => t.id === a.track.id)) return state;
+      return { ...state, playlist: [a.track, ...state.playlist] };
+
     case "REMOVE": {
-      const sel=new Set(state.selectedIds); sel.delete(a.id);
-      return { ...state, playlist: state.playlist.filter(t=>t.id!==a.id), selectedIds: sel };
+      const nextSel = new Set(state.selectedIds);
+      nextSel.delete(a.id);
+      const nextPlaylist = state.playlist.filter(t => t.id !== a.id);
+      return { ...state, playlist: nextPlaylist, selectedIds: nextSel };
     }
+
     case "TOGGLE_SELECT": {
-      const sel=new Set(state.selectedIds);
-      sel.has(a.id)?sel.delete(a.id):sel.add(a.id);
-      return { ...state, selectedIds: sel };
+      const next = new Set(state.selectedIds);
+      next.has(a.id) ? next.delete(a.id) : next.add(a.id);
+      return { ...state, selectedIds: next };
     }
-    case "HYDRATE": return a.state;
-    default: return state;
+
+    case "HYDRATE":
+      return a.state;
+
+    default:
+      return state;
   }
 }
