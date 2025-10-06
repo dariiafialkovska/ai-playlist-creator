@@ -16,7 +16,7 @@ export default function HeroSection({ content, onScrollToChat }: Props) {
 
       {/* content */}
       <div className="mx-auto w-full max-w-3xl text-center">
-        <h1 className={` text-5xl md:text-6xl font-extrabold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r ${theme.gradient}`}>
+        <h1 className={` text-xl md:text-6xl font-extrabold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r ${theme.gradient}`}>
           {content.title}
         </h1>
         <p className="text-base md:text-lg text-white/80 mb-8">
