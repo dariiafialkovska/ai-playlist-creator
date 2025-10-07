@@ -8,18 +8,20 @@ import type { ChatContent } from "@/src/types/ui";
 import { generatePlaylist } from "@/src/features/playlist/lib/generatePlaylist";
 import { usePlaylistController } from "@/src/features/playlist/app/usePlaylistController";
 import type { PlaylistResult } from "@/src/features/playlist/types";
+import TrackAttachment from "./TrackAttachment";
 type Props = { content: ChatContent };
 
 export default function ChatSection({ content }: Props) {
-  // ⬇️ HOOK MUST BE INSIDE FUNCTION
-const { state, add, remove, toggleSelect, getSelectedIds, ready } = usePlaylistController();
+  const { state, add, remove, toggleSelect, ready } = usePlaylistController();
 
+  // local state for selected IDs (ephemeral, not persisted)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [messages, setMessages] = useState<Message[]>([]);
   const [draft, setDraft] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<PlaylistResult | null>(null);
 
-  // show initial message once
+  // initial bot message
   useEffect(() => {
     if (content?.initialMessage && messages.length === 0) {
       setMessages([
@@ -61,9 +63,36 @@ const { state, add, remove, toggleSelect, getSelectedIds, ready } = usePlaylistC
     }
   };
 
+  const handleAddToChat = (tracks: any[]) => {
+  if (!tracks.length) return;
+  setMessages((prev) => [
+    ...prev,
+    {
+      id: crypto.randomUUID(),
+      role: "user",
+      text: "🎵 Added tracks:",
+      attachments: tracks,
+      at: Date.now(),
+    },
+  ]);
+};
+
+
+
+
+  // handle selection
+  const handleToggleSelect = (id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
+
+  const handleClearSelect = () => setSelectedIds(new Set());
+
   const placeholder = useMemo(() => content.placeholder || "type your vibe…", [content.placeholder]);
 
-  // Wait until playlist controller ready
   if (!ready)
     return (
       <section className="min-h-[60vh] flex items-center justify-center text-gray-500">
@@ -74,15 +103,19 @@ const { state, add, remove, toggleSelect, getSelectedIds, ready } = usePlaylistC
   return (
     <section className="min-h-[88vh] px-4 py-12">
       <div className="mx-auto grid w-full max-w-5xl md:grid-cols-[1fr_320px] gap-6">
-        {/* chat card */}
+        {/* Chat area */}
         <div className="rounded-3xl bg-white/70 backdrop-blur border border-black/5 shadow-lg p-6">
           <div className="mb-4 text-sm text-gray-500">🎧 Chat Mode</div>
           <div className="space-y-3 mb-6 max-h-[48vh] overflow-y-auto pr-1">
             {messages.map((m) => (
-              <ChatBubble key={m.id} role={m.role}>
-                {m.text}
-              </ChatBubble>
-            ))}
+  <div key={m.id}>
+    <ChatBubble role={m.role}>{m.text}</ChatBubble>
+    {m.attachments && m.attachments.length > 0 && (
+      <TrackAttachment tracks={m.attachments} />
+    )}
+  </div>
+))}
+
             {loading && (
               <ChatBubble role="bot">
                 <span className="inline-flex items-center gap-2">
@@ -103,15 +136,18 @@ const { state, add, remove, toggleSelect, getSelectedIds, ready } = usePlaylistC
           />
         </div>
 
-        {/* playlist result */}
+        {/* Playlist results */}
         <ResultPanel
           result={result}
           loading={loading}
           playlistIds={new Set(state.playlist.map((t) => t.id))}
-          selectedIds={state.selectedIds as Set<string>} // temporary cast
+          selectedIds={selectedIds}
           onAdd={add}
           onRemove={remove}
-          onToggleSelect={toggleSelect}
+          onToggleSelect={handleToggleSelect}
+          onClearSelect={handleClearSelect}
+          onAddToChat={handleAddToChat}
+
         />
       </div>
     </section>
