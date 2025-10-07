@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import type { Track } from "../domain/types";
+import { Plus, Minus } from "lucide-react"; // install: npm i lucide-react
 
 type Props = {
   track: Track;
@@ -39,22 +40,24 @@ export default function TrackItem({ track, inList, selected, onAdd, onRemove, on
       >
         {selected ? "Selected" : "Select"}
       </button>
-
-      {inList ? (
-        <button
-          onClick={handleRemove}
-          className="text-xs px-3 py-1 rounded-full border border-red-300 text-red-600 bg-red-50 hover:bg-red-100 transition"
-        >
-          Remove
-        </button>
-      ) : (
-        <button
-          onClick={() => onAdd(track)}
-          className="text-xs px-3 py-1 rounded-full border border-gray-300 hover:border-gray-500 transition"
-        >
-          Add
-        </button>
-      )}
+{inList ? (
+  <button
+    onClick={handleRemove}
+    className="p-2 rounded-full border border-red-300 text-red-600 hover:bg-red-50 transition"
+    aria-label="Remove"
+  >
+    <Minus size={16} />
+  </button>
+) : (
+  <button
+    onClick={() => onAdd(track)}
+    className="p-2 rounded-full border border-gray-300 hover:border-gray-500 transition"
+    aria-label="Add"
+  >
+    <Plus size={16} />
+  </button>
+)}
+     
     </div>
   );
 }
