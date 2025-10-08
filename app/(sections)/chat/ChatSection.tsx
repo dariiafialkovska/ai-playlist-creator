@@ -12,7 +12,7 @@ import TrackAttachment from "./TrackAttachment";
 type Props = { content: ChatContent };
 
 export default function ChatSection({ content }: Props) {
-  const { state, add, remove, toggleSelect, ready } = usePlaylistController();
+  const { playlist, add, remove, toggleSelect, ready } = usePlaylistController();
 
   // local state for selected IDs (ephemeral, not persisted)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -140,7 +140,7 @@ export default function ChatSection({ content }: Props) {
         <ResultPanel
           result={result}
           loading={loading}
-          playlistIds={new Set(state.playlist.map((t) => t.id))}
+          playlistIds={new Set(playlist.map((t) => t.id))}
           selectedIds={selectedIds}
           onAdd={add}
           onRemove={remove}

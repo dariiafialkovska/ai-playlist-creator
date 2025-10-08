@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PlaylistService } from "./PlaylistService";
 import { LocalPlaylistRepo } from "../infra/LocalPlaylistRepo";
 
@@ -7,12 +7,12 @@ let serviceSingleton: PlaylistService | null = null;
 
 export function usePlaylistController() {
   const [ready, setReady] = useState(false);
-  const [state, setState] = useState<{ playlist: any[]; selectedIds: Set<string> }>({
-    playlist: [],
-    selectedIds: new Set(),
-  });
+  const [playlist, setPlaylist] = useState<any[]>([]);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [expanded, setExpanded] = useState(false);
 
-  // init once
+  const toggleExpand = () => setExpanded((p) => !p);
+
   const initOnce = useRef(false);
   useEffect(() => {
     if (initOnce.current) return;
@@ -22,10 +22,17 @@ export function usePlaylistController() {
       if (!serviceSingleton) {
         serviceSingleton = await PlaylistService.create(LocalPlaylistRepo);
       }
-      // subscribe after service exists
-      const unsubscribe = serviceSingleton.subscribe((s) => setState(s));
-      setState(serviceSingleton.snapshot());
+
+      const unsubscribe = serviceSingleton.subscribe((s) => {
+        setPlaylist(s.playlist);
+        setSelectedIds(s.selectedIds);
+      });
+
+      const snapshot = serviceSingleton.snapshot();
+      setPlaylist(snapshot.playlist);
+      setSelectedIds(snapshot.selectedIds);
       setReady(true);
+
       return () => unsubscribe();
     })();
   }, []);
@@ -33,11 +40,25 @@ export function usePlaylistController() {
   const service = serviceSingleton;
 
   return {
-    state,
-    add: async (t: any) => service?.add(t),
-    remove: async (id: string) => service?.remove(id),
-    toggleSelect: async (id: string) => service?.toggleSelect(id),
-    getSelectedIds: () => (service ? service.getSelectedIds() : []),
     ready,
+    playlist,
+    selectedIds,
+    expanded,
+    toggleExpand,
+    add: async (t: any) => {
+      if (!service) return;
+      await service.add(t);
+      setPlaylist(service.snapshot().playlist);
+    },
+    remove: async (id: string) => {
+      if (!service) return;
+      await service.remove(id);
+      setPlaylist(service.snapshot().playlist);
+    },
+    toggleSelect: async (id: string) => {
+      if (!service) return;
+      await service.toggleSelect(id);
+      setSelectedIds(service.snapshot().selectedIds);
+    },
   };
 }
