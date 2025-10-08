@@ -7,5 +7,22 @@
   "chat": {
     "initialMessage": "hey bestie 💅 what’s today’s vibe?",
     "placeholder": "type what’s up (birthday, breakup, random sunday...)"
-  }
+  },
+  "examples": [
+    {
+      "id": "rainy-coding",
+      "prompt": "for coding in a rainy café",
+      "description": "lofi and jazz tones for quiet focus while raindrops hit the window"
+    },
+    {
+      "id": "midnight-drive",
+      "prompt": "arabic fusion beats for midnight drives",
+      "description": "late-night rhythms mixing oud with deep bass — perfect for empty highways"
+    },
+    {
+      "id": "reading-poetry",
+      "prompt": "reading poetry by candlelight",
+      "description": "warm acoustic textures and slow melodies for candlelit nights"
+    }
+  ]
 }
