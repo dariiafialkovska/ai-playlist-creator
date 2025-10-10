@@ -5,6 +5,7 @@ import { useRef } from "react";
 import { HeroSection } from "./(sections)/hero";
 import { ChatSection } from "./(sections)/chat";
 import { ExampleSection } from "./(sections)/examples/ExampleSection";
+import { MoodFeatureSection } from "./(sections)/mood/MoodFeatureSection";
 
 export default function ClientHome({ toneData }: { toneData: any }) {
   const chatRef = useRef<HTMLDivElement>(null);
@@ -12,7 +13,8 @@ export default function ClientHome({ toneData }: { toneData: any }) {
 
   return (
     <main>
-      <HeroSection content={toneData.hero} onScrollToChat={scrollToChat} />        <ExampleSection examples={toneData.examples} />
+      <HeroSection content={toneData.hero} onScrollToChat={scrollToChat}  />        <ExampleSection examples={toneData.examples} />
+      <MoodFeatureSection />
 
       <div ref={chatRef}>
         <ChatSection content={toneData.chat} />

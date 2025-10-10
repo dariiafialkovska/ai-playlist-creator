@@ -1,7 +1,7 @@
 "use client";
 import { HeroContent } from "@/src/types/ui";
 import { theme } from "@/src/constants/themes";
-
+import { GlassButton } from "@/src/components/ui/GlassButton";
 type Props = {
   content: HeroContent;
   onScrollToChat: () => void;
@@ -11,25 +11,25 @@ export default function HeroSection({ content, onScrollToChat }: Props) {
   return (
     <section className="relative flex min-h-[88vh] items-center justify-center px-6">
       {/* background */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-[#0f0f11] via-[#121416] to-[#171a1d]" />
-      <div className="absolute inset-0 -z-10 opacity-20 blur-3xl bg-gradient-to-tr from-fuchsia-400/40 via-emerald-400/30 to-cyan-400/40" />
-
+      <div className="absolute inset-0 -z-10 bg-[#120d16]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,#a74aff_0%,transparent_40%),radial-gradient(circle_at_80%_70%,#ff7b5f_0%,transparent_45%)] blur-3xl opacity-80" />
+      <div className="absolute inset-0 opacity-[0.05] mix-blend-overlay"
+        style={{
+          backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')",
+          backgroundRepeat: "repeat",
+        }} />
       {/* content */}
       <div className="mx-auto w-full max-w-3xl text-center">
-        <h1 className={` text-xl md:text-6xl font-extrabold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r ${theme.gradient}`}>
+        <h1 className={` text-xl md:text-6xl font-base tracking-tight mb-4 bg-clip-text text-white bg-gradient-to-r ${theme.gradient}`}>
           {content.title}
         </h1>
         <p className="text-base md:text-lg text-white/80 mb-8">
           {content.description}
         </p>
 
-        <button
-          onClick={onScrollToChat}
-          className={`inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm md:text-base text-white transition-all ${theme.glass} hover:border-white/40`}
-          aria-label="Scroll to chat"
-        >
-          {content.ctaText}
-        </button>
+        <GlassButton onClick={onScrollToChat} ariaLabel="Scroll to chat">
+  {content.ctaText}
+</GlassButton>
       </div>
     </section>
   );
