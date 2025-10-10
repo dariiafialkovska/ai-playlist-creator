@@ -25,13 +25,16 @@ export default function TrackItem({
     <div
       onClick={() => selectMode && onToggleSelect(track.id)}
       className={`flex items-center gap-3 py-3 px-2 rounded-xl transition-all duration-200 cursor-pointer relative
-        ${selected ? "bg-emerald-50 ring-2 ring-emerald-400/60" : "hover:bg-gray-50"}
-      `}
+        ${
+          selected
+            ? "bg-purple-600/20 ring-1 ring-purple-400/40"
+            : "hover:bg-white/[0.05] hover:backdrop-blur-sm"
+        }`}
     >
       {selectMode && (
         <CheckCircle2
           className={`absolute left-1 top-1 ${
-            selected ? "text-emerald-500" : "text-gray-300"
+            selected ? "text-purple-400" : "text-white/20"
           }`}
           size={18}
         />
@@ -43,8 +46,10 @@ export default function TrackItem({
         className="h-14 w-14 rounded-lg object-cover flex-shrink-0"
       />
       <div className="flex flex-col overflow-hidden flex-1">
-        <span className="font-medium text-sm truncate">{track.title}</span>
-        <span className="text-xs text-gray-500 truncate">{track.artist}</span>
+        <span className="font-medium text-sm text-white truncate">
+          {track.title}
+        </span>
+        <span className="text-xs text-white/50 truncate">{track.artist}</span>
       </div>
 
       {!selectMode && (
@@ -55,7 +60,7 @@ export default function TrackItem({
                 e.stopPropagation();
                 onRemove(track.id);
               }}
-              className="p-2 rounded-full border border-red-300 text-red-600 hover:bg-red-50 transition"
+              className="p-2 rounded-full border border-red-500/40 text-red-400 hover:bg-red-500/20 transition"
             >
               <Minus size={16} />
             </button>
@@ -65,7 +70,7 @@ export default function TrackItem({
                 e.stopPropagation();
                 onAdd(track);
               }}
-              className="p-2 rounded-full border border-gray-300 hover:border-gray-500 transition"
+              className="p-2 rounded-full border border-white/10 text-white/80 hover:border-purple-400 hover:bg-white/[0.07] transition"
             >
               <Plus size={16} />
             </button>

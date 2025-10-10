@@ -30,7 +30,7 @@ export default function TrackList({
   });
 
   return (
-    <motion.ul className="divide-y divide-gray-200 flex flex-col">
+    <motion.ul className=" flex flex-col">
       <AnimatePresence mode="popLayout">
         {ordered.map((t) => (
           <motion.li
