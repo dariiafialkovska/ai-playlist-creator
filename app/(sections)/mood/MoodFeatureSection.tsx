@@ -1,6 +1,7 @@
 "use client";
 import { MoodOrb } from "./MoodOrb";
 import { MoodFeatureCard } from "./MoodFeatureCard";
+import { Container } from "@/src/components/layout/Container";
 
 const features = [
   {
@@ -22,6 +23,7 @@ const features = [
 
 export function MoodFeatureSection() {
   return (
+    <Container>
     <section className="py-28 md:py-36">
       <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
         {/* Left side: Mood Orb */}
@@ -42,5 +44,6 @@ export function MoodFeatureSection() {
         </div>
       </div>
     </section>
+    </Container>
   );
 }

@@ -9,6 +9,7 @@ import { generatePlaylist } from "@/src/features/playlist/lib/generatePlaylist";
 import { usePlaylistController } from "@/src/features/playlist/app/usePlaylistController";
 import type { PlaylistResult } from "@/src/features/playlist/types";
 import TrackAttachment from "./TrackAttachment";
+import { Container } from "@/src/components/layout/Container";
 type Props = { content: ChatContent };
 
 export default function ChatSection({ content }: Props) {
@@ -101,6 +102,7 @@ export default function ChatSection({ content }: Props) {
     );
 
   return (
+    <Container>
     <section className="min-h-[88vh] px-4 py-12">
       <div className="mx-auto grid w-full max-w-5xl md:grid-cols-[1fr_320px] gap-6">
         {/* Chat area */}
@@ -151,5 +153,6 @@ export default function ChatSection({ content }: Props) {
         />
       </div>
     </section>
+    </Container>
   );
 }

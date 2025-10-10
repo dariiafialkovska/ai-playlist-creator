@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-
+import { Container } from "../layout/Container";
 export default function Navbar() {
   const [hidden, setHidden] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -19,6 +19,7 @@ export default function Navbar() {
   }, [lastScrollY]);
 
   return (
+    <Container>
     <nav
       className={`fixed top-0 left-0 right-0 z-50
       border-b border-white/10 backdrop-blur-2xl bg-transparent
@@ -45,5 +46,6 @@ export default function Navbar() {
         </Link>
       </div>
     </nav>
+    </Container>
   );
 }
